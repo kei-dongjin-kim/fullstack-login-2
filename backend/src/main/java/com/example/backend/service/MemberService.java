@@ -1,28 +1,37 @@
 package com.example.backend.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.backend.entity.MemberRoleEntity;
 import com.example.backend.mapper.MemberRoleMapper;
 import com.example.backend.dto.MemberDto;
 import com.example.backend.entity.MemberEntity;
 import com.example.backend.mapper.MemberMapper;
-import org.springframework.stereotype.Service;
+
 
 @Service
 public class MemberService {
 
     private final MemberMapper memberMapper;
     private final MemberRoleMapper memberRoleMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public MemberService(MemberMapper memberMapper, MemberRoleMapper memberRoleMapper) {
+    public MemberService(
+        MemberMapper memberMapper,
+        MemberRoleMapper memberRoleMapper,
+        PasswordEncoder passwordEncoder
+    ) {
         this.memberMapper = memberMapper;
         this.memberRoleMapper = memberRoleMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public MemberDto signUp(MemberDto memberDto) {
         try {
             MemberEntity memberEntity = MemberEntity.builder()
                     .email(memberDto.getEmail())
-                    .password(memberDto.getPassword())
+                    .password(passwordEncoder.encode(memberDto.getPassword()))
                     .username(memberDto.getUsername())
                     .build();
 
