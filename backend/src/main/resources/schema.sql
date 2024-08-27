@@ -1,0 +1,24 @@
+DROP TABLE IF EXISTS member_role;
+DROP TABLE IF EXISTS member;
+DROP TABLE IF EXISTS role;
+
+CREATE TABLE IF NOT EXISTS member (
+  id BIGSERIAL PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS role (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS member_role (
+  member_id BIGINT NOT NULL,
+  role_id INT NOT NULL,
+  PRIMARY KEY (member_id, role_id),
+  FOREIGN KEY (member_id) REFERENCES member(id),
+  FOREIGN KEY (role_id) REFERENCES role(id)
+);
